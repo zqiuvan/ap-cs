@@ -16,54 +16,53 @@ public class MidpointKarel extends SuperKarel
         if(frontIsBlocked())
         {
             putBall();
+            return;
         }
-        // this is the actual code
-        else
+
+        // this is the actual code for handling words wider than one
+        markTwoEdges();
+        /**
+         * this while loop is reached every time Karel finishes
+         * a markTwoEnds + moveInOne cycle
+         */
+        while(noBallsPresent())
         {
-            markTwoEdges();
             /**
-             * this while loop is reached every time Karel finishes
-             * a markTwoEnds + moveInOne cycle
+             * this move + ballsPresent check is for Karel to
+             * determine whether she's done laying down the
+             * "calibration" balls
              */
-            while(noBallsPresent())
+            move();
+            /**
+             * if Karel moves onto a ball here, it means she was
+             * JUST standing on the centre tile
+             */
+            if(ballsPresent())
+            {
+                // turn around and go back to centre tile
+                turnAround();
+                move();
+                // finishing steps
+                markMiddle();
+                cleanUp();
+                goToMiddle();
+            }
+            else
+            /**
+             * if Karel goes forward one and DOESN't step on a
+             * ball, it means she needs to do more markTwoEdges
+             * cycles
+             */
             {
                 /**
-                 * this move + ballsPresent check is for Karel to
-                 * determine whether she's done laying down the
-                 * "calibration" balls
+                 * Karel steps back to where she was before the
+                 * check
                  */
+                turnAround();
                 move();
-                /**
-                 * if Karel moves onto a ball here, it means she was
-                 * JUST standing on the centre tile
-                 */
-                if(ballsPresent())
-                {
-                    // turn around and go back to centre tile
-                    turnAround();
-                    move();
-                    // finishing steps
-                    markMiddle();
-                    cleanUp();
-                    goToMiddle();
-                }
-                else
-                /**
-                 * if Karel goes forward one and DOESN't step on a
-                 * ball, it means she needs to do more markTwoEdges
-                 * cycles
-                 */
-                {
-                    /**
-                     * Karel steps back to where she was before the
-                     * check
-                     */
-                    turnAround();
-                    move();
-                    turnAround();
-                    markTwoEnds();
-                    moveInOne();
-                }
+                turnAround();
+                markTwoEnds();
+                moveInOne();
             }
         }
         faceEast();
